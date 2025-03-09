@@ -37,11 +37,15 @@ jobs:
   # We Need To install PM2 on Our Environment first
     - name: Deploy application
       run: |
+        ls -a
+        pm2 status
         # Stop existing process if running
         pm2 delete node-app || true
+
+
         
         # Start new process
-        pm2 start src/server.js --name node-app
+        pm2 start ./src/server.js --name node-app
         
         # Save PM2 process list
         pm2 save
