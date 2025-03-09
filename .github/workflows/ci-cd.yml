@@ -1,0 +1,47 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: "22"
+        
+    - name: Install dependencies
+      run: npm install
+      
+    - name: Run tests
+      run: npm test
+
+  build-and-deploy:
+    needs: test
+    runs-on: self-hosted
+    steps:
+    - name: Build application
+      run: |
+        npm install
+        # Add any build steps if needed
+        
+  # We Need To install PM2 on Our Environment first
+    - name: Deploy application
+      run: |
+        # Stop existing process if running
+        pm2 delete node-app || true
+        
+        # Start new process
+        pm2 start src/server.js --name node-app
+        
+        # Save PM2 process list
+        pm2 save
