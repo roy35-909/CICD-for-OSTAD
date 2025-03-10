@@ -21,7 +21,13 @@ jobs:
         
     - name: Install dependencies
       run: npm install
-      
+    - name: Create An Artifact
+      run: echo "hello World" > hello.txt
+    - name: Upload An Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: hello_artiface
+        path: ./hello.txt
     - name: Run tests
       run: npm test
 
@@ -31,6 +37,15 @@ jobs:
     steps:
     - name: Checkout The Code 
       uses: actions/checkout@v3
+    
+    - name: Download The Artiface
+      uses: actions/download-artifact@v4
+      with:
+        name: hello_artiface
+    - name: Print The Artiface
+      run: |
+        cat ./hello.txt
+
     - name: Build application
       run: |
         npm install
